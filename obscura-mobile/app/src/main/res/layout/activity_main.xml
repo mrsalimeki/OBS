@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- header: tabs + info -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="6dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="2dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/tabsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tabs"
+            app:icon="@drawable/ic_tabs"
+            style="@style/Widget.Material3.Button.TonalButton" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/infoButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/help_title"
+            android:src="@drawable/ic_info" />
+    </LinearLayout>
+
+    <!-- url row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+
+        <EditText
+            android:id="@+id/urlField"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/outline"
+            android:hint="https://…"
+            android:importantForAutofill="no"
+            android:inputType="textUri"
+            android:maxLines="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textSize="14sp" />
+
+        <ProgressBar
+            android:id="@+id/navProgress"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginEnd="6dp"
+            android:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/goButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/go" />
+    </LinearLayout>
+
+    <!-- controls row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="4dp">
+
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go"
+            android:src="@drawable/ic_back" />
+
+        <ImageButton
+            android:id="@+id/forwardButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/go"
+            android:src="@drawable/ic_forward" />
+
+        <ImageButton
+            android:id="@+id/reloadButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/viewport_desktop"
+            android:src="@drawable/ic_refresh" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/viewportButton"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:text="@string/viewport_phone"
+            style="@style/Widget.Material3.Button.TextButton" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/screenshotButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/screenshot"
+            android:src="@drawable/ic_camera" />
+
+        <ImageButton
+            android:id="@+id/pdfButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/pdf"
+            android:src="@drawable/ic_pdf" />
+    </LinearLayout>
+
+    <!-- live frame -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/black">
+
+        <ImageView
+            android:id="@+id/frameView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:background="@color/surface_variant"
+            android:maxEms="28"
+            android:maxLines="1"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/on_surface_variant"
+            android:textSize="11sp"
+            android:ellipsize="end" />
+    </FrameLayout>
+
+    <!-- console -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="12dp"
+            android:paddingTop="6dp"
+            android:text="@string/console_title"
+            android:textColor="@color/on_surface_variant"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/consoleView"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/surface"
+            android:fontFamily="monospace"
+            android:isVerticalScrollBarEnabled="true"
+            android:padding="6dp"
+            android:scrollbars="vertical"
+            android:textColor="@color/on_surface_variant"
+            android:textIsSelectable="true"
+            android:textSize="11sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp">
+
+            <EditText
+                android:id="@+id/evalField"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/outline"
+                android:hint="@string/eval_hint"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/evalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/run" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- status -->
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="6dp"
+        android:textColor="@color/on_surface_variant"
+        android:textSize="11sp" />
+</LinearLayout>
