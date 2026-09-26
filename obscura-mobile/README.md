@@ -100,11 +100,11 @@ OBSCURA_CDP_TOKEN="$(openssl rand -hex 32)" obscura serve --host 0.0.0.0 --port 
 
 ## 📍 أين يعيش هذا الكود؟
 
-لأن البناء المجاني عبر GitHub Actions يتوفر على مستودعك، وُضع الكود في هذا المجلد
-`obscura-mobile/` داخل مستودع `mrsalimeki/OBS`، وملف الـ workflow في
-`.github/workflows/obscura-mobile-apk.yml`. كل تعديل هنا يولّد تلقائيًا نسخة APK
-جديدة في صفحة Releases. يمكنك لاحقًا نقل المجلد إلى مستودع مستقل (مثلاً
-`mrsalimeki/obscura-mobile`) بملء حريتك.
+وُضع الكود في هذا المجلد `obscura-mobile/` داخل مستودع `mrsalimeki/OBS`.
+للحصول على ملف APK جاهز: راجع [BUILD-APK.md](BUILD-APK.md) — الطريقة (أ) تنصب
+بناءً تلقائيًا مجانيًا عبر GitHub Actions (خطوة واحدة من متصفحك)، فكل تحديث
+للكود يولّد APK جديدًا في صفحة Releases. يمكنك لاحقًا نقل المجلد إلى مستودع
+مستقل (مثلاً `mrsalimeki/obscura-mobile`) بملء حريتك.
 
 ## 📄 الرخصة
 
