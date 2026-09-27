@@ -1,6 +1,8 @@
 package sh.obscura.mobile
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import kotlin.math.roundToInt
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,12 @@ class LiveBrowser(
     var targetId: String? = null
         private set
     var sessionId: String? = null
+        private set
+    /** Whether the current viewport override uses mobile emulation. */
+    var viewportMobile: Boolean = true
+        private set
+    /** deviceScaleFactor of the current viewport override (screenshots are CSS x this). */
+    var deviceScaleFactor: Int = 3
         private set
 
     val pageUrl = MutableStateFlow("")
@@ -176,7 +184,16 @@ class LiveBrowser(
     fun setPhoneViewport() = setViewport(390, 844, 3, true)
     fun setDesktopViewport() = setViewport(1280, 800, 1, false)
 
+    /** Choose a viewport whose aspect ratio matches the display, so the frame fills it. */
+    fun setFitViewport(aspectWOverH: Float) {
+        val w = 800
+        val h = (w / aspectWOverH.coerceIn(0.2f, 5f)).roundToInt().coerceIn(200, 2000)
+        setViewport(w, h, 2, true)
+    }
+
     private fun setViewport(w: Int, h: Int, dpr: Int, mobile: Boolean) {
+        viewportMobile = mobile
+        deviceScaleFactor = dpr
         scope.launch {
             try {
                 ensureAttached()
@@ -197,6 +214,192 @@ class LiveBrowser(
                 // best effort
             }
         }
+    }
+
+    // ---------- input (tap / swipe / type) ----------
+
+    /** A single tap at CSS-pixel coordinates. */
+    fun tap(x: Float, y: Float) {
+        scope.launch {
+            try {
+                ensureAttached()
+                if (viewportMobile) {
+                    client.call(
+                        "Input.dispatchTouchEvent",
+                        touchEvent("touchStart", listOf(x to y)),
+                        sessionId
+                    )
+                    client.call(
+                        "Input.dispatchTouchEvent",
+                        touchEvent("touchEnd", emptyList()),
+                        sessionId
+                    )
+                } else {
+                    client.call(
+                        "Input.dispatchMouseEvent",
+                        mouseEvent("mouseMoved", x, y),
+                        sessionId
+                    )
+                    client.call(
+                        "Input.dispatchMouseEvent",
+                        mouseEvent("mousePressed", x, y, "left", 1),
+                        sessionId
+                    )
+                    client.call(
+                        "Input.dispatchMouseEvent",
+                        mouseEvent("mouseReleased", x, y, "left", 1),
+                        sessionId
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // best effort
+            }
+        }
+    }
+
+    /** A swipe along the given CSS-pixel path (used to scroll the page). */
+    fun swipe(path: List<Pair<Float, Float>>) {
+        if (path.size < 2) return
+        scope.launch {
+            try {
+                ensureAttached()
+                if (viewportMobile) {
+                    client.call(
+                        "Input.dispatchTouchEvent",
+                        touchEvent("touchStart", listOf(path.first())),
+                        sessionId
+                    )
+                    for (i in 1 until path.size) {
+                        client.call(
+                            "Input.dispatchTouchEvent",
+                            touchEvent("touchMove", listOf(path[i])),
+                            sessionId
+                        )
+                        delay(12)
+                    }
+                    client.call(
+                        "Input.dispatchTouchEvent",
+                        touchEvent("touchEnd", emptyList()),
+                        sessionId
+                    )
+                } else {
+                    // emulate wheel scrolling on the desktop viewport
+                    val start = path.first()
+                    val end = path.last()
+                    val dy = ((start.second - end.second) / 8f).roundToInt().coerceIn(-1200, 1200)
+                    client.call(
+                        "Input.dispatchMouseEvent",
+                        mouseEvent("mouseWheel", start.first, start.second).apply {
+                            addProperty("deltaX", 0)
+                            addProperty("deltaY", dy)
+                        },
+                        sessionId
+                    )
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // best effort
+            }
+        }
+    }
+
+    /** Type text into the focused element. */
+    fun typeText(text: String) {
+        scope.launch {
+            try {
+                ensureAttached()
+                client.call(
+                    "Input.insertText",
+                    JsonObject().apply { addProperty("text", text) },
+                    sessionId
+                )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // best effort
+            }
+        }
+    }
+
+    /** Press a key (e.g. Enter) on the focused element. */
+    fun pressKey(key: String) {
+        scope.launch {
+            try {
+                ensureAttached()
+                val keyCode = key.virtualKeyCode()
+                client.call(
+                    "Input.dispatchKeyEvent",
+                    JsonObject().apply {
+                        addProperty("type", "keyDown")
+                        addProperty("key", key)
+                        if (key == "Enter") addProperty("code", "Enter")
+                        addProperty("windowsVirtualKeyCode", keyCode)
+                        addProperty("nativeVirtualKeyCode", keyCode)
+                        if (keyCode != 0) addProperty("keyCode", keyCode)
+                    },
+                    sessionId
+                )
+                client.call(
+                    "Input.dispatchKeyEvent",
+                    JsonObject().apply {
+                        addProperty("type", "keyUp")
+                        addProperty("key", key)
+                        if (key == "Enter") addProperty("code", "Enter")
+                        addProperty("windowsVirtualKeyCode", keyCode)
+                        addProperty("nativeVirtualKeyCode", keyCode)
+                    },
+                    sessionId
+                )
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // best effort
+            }
+        }
+    }
+
+    private fun touchEvent(type: String, points: List<Pair<Float, Float>>): JsonObject =
+        JsonObject().apply {
+            addProperty("type", type)
+            add(
+                "touchPoints",
+                JsonArray().apply {
+                    points.forEach { (x, y) ->
+                        add(
+                            JsonObject().apply {
+                                addProperty("x", x)
+                                addProperty("y", y)
+                            }
+                        )
+                    }
+                }
+            )
+        }
+
+    private fun mouseEvent(
+        type: String,
+        x: Float,
+        y: Float,
+        button: String? = null,
+        clickCount: Int? = null
+    ): JsonObject =
+        JsonObject().apply {
+            addProperty("type", type)
+            addProperty("x", x)
+            addProperty("y", y)
+            button?.let { addProperty("button", it) }
+            clickCount?.let { addProperty("clickCount", it) }
+        }
+
+    private fun String.virtualKeyCode(): Int = when (this) {
+        "Enter" -> 13
+        "Backspace" -> 8
+        "Tab" -> 9
+        " " -> 32
+        else -> 0
     }
 
     // ---------- JavaScript ----------
@@ -304,6 +507,9 @@ class LiveBrowser(
                             ?: ""
                     }
                 }
+                // Obscura's SSRF filter logs "Forbidden URL scheme 'blob'" for
+                // pages that load dynamic scripts - noise for the user.
+                if (text.contains("Forbidden URL scheme", true)) return
                 val type = params.get("type")?.asString ?: "log"
                 appendConsole("[$type] $text")
             }

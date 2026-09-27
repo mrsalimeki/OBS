@@ -169,6 +169,16 @@
             android:textColor="@color/on_surface_variant"
             android:textSize="11sp"
             android:ellipsize="end" />
+
+        <ImageButton
+            android:id="@+id/typeButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_type_button"
+            android:contentDescription="@string/type_text"
+            android:src="@drawable/ic_pen" />
     </FrameLayout>
 
     <!-- console -->

@@ -15,7 +15,7 @@
 
     <!-- Help dialog -->
     <string name="help_title">تشغيل مجاني 100٪ على هاتفك</string>
-    <string name="help_body">الخطوة 1 — ثبّت Termux من F-Droid (مجاني تمامًا).\n\nالخطوة 2 — داخل Termux:\npkg update\npkg install proot-distro curl\nproot-distro install ubuntu\nproot-distro login ubuntu\n\nالخطوة 3 — داخل Ubuntu (تعمل داخل هاتفك):\ncurl -LO https://github.com/h4ckf0r0day/obscura/releases/latest/download/obscura-aarch64-linux.tar.gz\ntar xzf obscura-aarch64-linux.tar.gz\n\nالخطوة 4 — شغّل الخادم:\n./obscura serve --port 9222\n\nالخطوة 5 — افتح هذا التطبيق: العنوان 127.0.0.1 والمنفذ 9222 بدون توكن.\n\nبدائل مجانية: جهازك على نفس شبكة الواي فاي، أو أي سيرفر Linux مجاني (مثل Oracle Cloud Free Tier) مع توكن أمان.</string>
+    <string name="help_body">الخطوة 1 — ثبّت Termux من F-Droid (مجاني تمامًا).\n\nالخطوة 2 — داخل Termux:\npkg update\npkg install proot-distro curl\nproot-distro install ubuntu\nproot-distro login ubuntu\n\nالخطوة 3 — داخل Ubuntu (تعمل داخل هاتفك):\ncurl -LO https://github.com/h4ckf0r0day/obscura/releases/latest/download/obscura-aarch64-linux.tar.gz\ntar xzf obscura-aarch64-linux.tar.gz\n\nالخطوة 4 — شغّل الخادم:\n./obscura serve --port 9222\n\nالخطوة 5 — افتح هذا التطبيق: العنوان 127.0.0.1 والمنفذ 9222 بدون توكن.\n\nبدائل مجانية: جهازك على نفس شبكة الواي فاي، أو أي سيرفر Linux مجاني (مثل Oracle Cloud Free Tier) مع توكن أمان.\n\n■ الاستخدام:\n• انقر على أي مكان في الصفحة = نقرة (رابط، زر…)\n• اسحب لأعلى/لأسفل = تمرير الصفحة\n• زر القلم ✏️ (أمام) = الكتابة في حقل نص (انقر الحقل أولًا)\n• زر «هاتف/كمبيوتر/ملء الشاشة» = تغيير حجم الصفحة</string>
 
     <!-- Main screen -->
     <string name="tabs">التبويبات</string>
@@ -24,6 +24,7 @@
     <string name="go">فتح</string>
     <string name="viewport_phone">هاتف</string>
     <string name="viewport_desktop">كمبيوتر</string>
+    <string name="viewport_fit">ملء الشاشة</string>
     <string name="screenshot">لقطة</string>
     <string name="pdf">PDF</string>
     <string name="console_title">وحدة التحكم (Console)</string>
@@ -37,4 +38,12 @@
     <string name="retry">إعادة المحاولة</string>
     <string name="go_connect">شاشة الاتصال</string>
     <string name="server_label">الخادم: %1$s:%2$s</string>
+
+    <!-- Text input on the page -->
+    <string name="type_text">اكتب في الصفحة</string>
+    <string name="type_dialog_title">الكتابة في الصفحة</string>
+    <string name="type_dialog_note">انقر أولًا على حقل النص في الصفحة (مثل خانة البحث)، ثم اكتب النص هنا.</string>
+    <string name="type_dialog_hint">اكتب النص هنا…</string>
+    <string name="type_enter">كتابة + Enter</string>
+    <string name="type_only">كتابة فقط</string>
 </resources>
