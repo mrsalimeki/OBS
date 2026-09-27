@@ -98,6 +98,31 @@ OBSCURA_CDP_TOKEN="$(openssl rand -hex 32)" obscura serve --host 0.0.0.0 --port 
   من التطبيق (خادم تطوير على نفس الجهاز…) مرّر `--allow-private-network` عند تشغيل
   `obscura serve`.
 
+## 🌐 بدل APK: واجهة في متصفّح الهاتف (الخفيف)
+
+إذا كنت تفضّل عدم تثبيت أي تطبيق، يوجد ملف واحد يفتح واجهة كاملة في متصفح
+الهاتف نفسه (Chrome) — نفس الخصائص: فتح الصفحات، النقر، التمرير، الكتابة،
+لقطة/PDF، وحدة التحكم. يعمل محليًا عبر `127.0.0.1` فقط.
+
+داخل Termux (مرة واحدة): `pkg install nodejs`
+
+ثم كل مرة:
+
+```
+node /sdcard/Download/server.mjs
+```
+
+افتح في المتصفح: `http://127.0.0.1:8080`
+
+الملف: [`web/server.mjs`](web/server.mjs) — انسخه إلى الهاتف، أو نزّله مباشرة
+داخل Termux:
+
+```
+mkdir -p ~/obscura-web && cd ~/obscura-web
+curl -LO "https://raw.githubusercontent.com/mrsalimeki/OBS/arena%2F01a0dd4d-obs/obscura-mobile/web/server.mjs"
+node server.mjs
+```
+
 ## 📍 أين يعيش هذا الكود؟
 
 وُضع الكود في هذا المجلد `obscura-mobile/` داخل مستودع `mrsalimeki/OBS`.
