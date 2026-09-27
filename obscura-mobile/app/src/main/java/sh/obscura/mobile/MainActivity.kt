@@ -127,7 +127,11 @@ class MainActivity : AppCompatActivity() {
                 val text = lines.joinToString("\n")
                 if (consoleView.text.toString() != text) {
                     consoleView.text = text
-                    consoleView.post { consoleView.scrollTo(0, consoleView.scrollHeight) }
+                    consoleView.post {
+                        // scroll to the bottom of the content
+                        val contentHeight = consoleView.layout?.height ?: 0
+                        consoleView.scrollTo(0, contentHeight)
+                    }
                 }
             }
         }
